@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project]
+name = "advent"
+description = "My solutions to Advent 2024"
+authors = [{name="William Fong", email="willfong@mit.edu"}]
+readme = "README.rst"
+dynamic = ["version"]
+
+dependencies = [
+    "click",
+    "pytest",
+    "hypothesis",
+    "setuptools>69.5",
+    "deal",
+    "black",
+    "isort",
+    "mypy",
+    "flake8",
+    "numpy",
+    "nox"
+]
+
+
+[tool.setuptools.dynamic]
+version = {attr = "advent.__version__"}
+
+[tool.mypy]
+disable_error_code = "import-untyped"
+
+
+[tool.flake8]
+max-line-length = 81
+
+[tool.black]
+line-length = 79
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 79
