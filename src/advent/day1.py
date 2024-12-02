@@ -10,7 +10,7 @@ from numpy._typing import NDArray
 def interpret_payload(*filepaths: PathLike) -> NDArray:
     """
     Interpret Day 1 Location IDs in the pattern of
-    ``^\d+\s+\d+$``.  # noqa
+    (int)   (int)
     """
     array = np.array(
         [
@@ -31,3 +31,29 @@ def measure_distance(array: NDArray) -> int:
         np.abs(by_list[0][lhs_sorted_idx] - by_list[1][rhs_sorted_idx])
     )
     return diff
+
+
+def _load_counter(array: NDArray) -> dict[int, int]:
+    """
+    Processess the given array, loading in each unique element into a
+    dictionary lookup with the number of times that element occurs in the
+    provided array.
+    """
+    value, occurances = np.unique(array, return_counts=True)
+    return dict(zip(value, occurances))
+
+
+@deal.pre(
+    lambda lhs, rhs: lhs.shape == rhs.shape,
+    message="Arrays must be of the same dimensionality.",
+)
+def calculate_simularity(lhs: NDArray, rhs: NDArray) -> int:
+    lhs_counter = _load_counter(lhs)
+    rhs_counter = _load_counter(rhs)
+
+    # 'similary' requires elements to be members of both lists
+    common_elements = set(lhs_counter.keys()) & set(rhs_counter.keys())
+    similarity = 0
+    for element in common_elements:
+        similarity += element * lhs_counter[element] * rhs_counter[element]
+    return similarity

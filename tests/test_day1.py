@@ -20,7 +20,7 @@ def write_payload(output: pathlib.Path, payload: list[tuple[int, int]]):
             fout.write(f"{lhs}    {rhs}\n")
 
 
-def test_advent_reference():
+def test_advent_reference_part_1():
     # Test the example given by https://adventofcode.com/2024/day/1
     reference = np.array(
         [
@@ -34,3 +34,18 @@ def test_advent_reference():
     )
     distance = day1.measure_distance(reference)
     assert distance == 11
+
+
+def test_advent_reference_part_2():
+    reference = np.array(
+        [
+            [3, 4],
+            [4, 3],
+            [2, 5],
+            [1, 3],
+            [3, 9],
+            [3, 3],
+        ]
+    )
+    similarity = day1.calculate_simularity(reference.T[0], reference.T[1])
+    assert similarity == 31
