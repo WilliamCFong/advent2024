@@ -1,36 +1,20 @@
 import numpy as np
 from hypothesis import HealthCheck, given, settings
 from hypothesis import strategies as st
-from hypothesis.extra import numpy as np_st
 
 from advent.day2 import count_safe_rows, determine_safe_rows
 
 
 def reactor_levels():
-    return np_st.arrays(
-        np.int32,
-        shape=st.tuples(
-            st.integers(min_value=1, max_value=1000),
-            st.just(5),
-        ),
-        unique=True,
-    )
-
-
-def all_increasing_levels():
-    return reactor_levels().map(lambda matrix: np.sort(matrix, axis=-1))
-
-
-def all_decreasing_levels():
-    return reactor_levels().map(
-        lambda matrix: np.sort(matrix, axis=-1)[:, ::-1]
+    return st.lists(
+        st.lists(st.integers(), min_size=2, max_size=10), min_size=1
     )
 
 
 @settings(
     suppress_health_check=[HealthCheck.too_slow, HealthCheck.data_too_large]
 )
-@given(st.one_of(all_increasing_levels(), all_decreasing_levels()))
+@given(reactor_levels())
 def test_determine_safe_rows(matrix):
     safe_row_mask = determine_safe_rows(matrix)
     for levels, check in zip(matrix, safe_row_mask):
