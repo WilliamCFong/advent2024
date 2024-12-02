@@ -25,7 +25,7 @@ def day_1(input_files: list[pathlib.Path], part_1: bool, trace: bool):
         rhs = payload[1]
 
         if part_1:
-            with profile(pass_through=trace):
+            with profile(pass_through=not trace):
                 distance = day1.measure_distance(lhs, rhs)
             print(f"{file.name} distance: {distance}")
         else:
@@ -42,7 +42,7 @@ def day_2(input_file: pathlib.Path, part_1: bool, trace: bool):
     payload = day2.interpret_payload(input_file)
 
     if part_1:
-        with profile(pass_through=trace):
+        with profile(pass_through=not trace):
             n_safe_rows = day2.count_safe_rows(payload)
         print(f"{input_file.name} has {n_safe_rows} safe reports")
     else:
