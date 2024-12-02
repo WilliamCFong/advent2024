@@ -10,7 +10,7 @@ def interpret_payload(path: pathlib.Path) -> list[npt.NDArray]:
     with open(path, "rt") as fin:
         for raw_report in fin:
             report = np.array(
-                int(token) for token in raw_report.strip().split()
+                list(int(token) for token in raw_report.strip().split())
             )
             all_reports.append(report)
 
