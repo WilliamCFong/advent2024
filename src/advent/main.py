@@ -15,13 +15,15 @@ def advent():
 @click.option("--part-1/--part-2", default=True)
 def day_1(input_files: list[pathlib.Path], part_1: bool):
     for file in input_files:
-        array = day1.interpret_payload(file)
+        payload = day1.interpret_payload(file)
+        lhs = payload[0]
+        rhs = payload[1]
 
         if part_1:
-            distance = day1.measure_distance(array)
+            distance = day1.measure_distance(lhs, rhs)
             print(f"{file.name} distance: {distance}")
         else:
-            similarity = day1.calculate_simularity(array.T[0], array.T[1])
+            similarity = day1.calculate_simularity(lhs, rhs)
             print(f"{file.name} similarity: {similarity}")
 
 

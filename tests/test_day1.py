@@ -31,8 +31,8 @@ def test_advent_reference_part_1():
             [3, 9],
             [3, 3],
         ]
-    )
-    distance = day1.measure_distance(reference)
+    ).T
+    distance = day1.measure_distance(reference[0], reference[1])
     assert distance == 11
 
 
@@ -46,6 +46,6 @@ def test_advent_reference_part_2():
             [3, 9],
             [3, 3],
         ]
-    )
-    similarity = day1.calculate_simularity(reference.T[0], reference.T[1])
+    ).T
+    similarity = day1.calculate_simularity(reference[0], reference[1])
     assert similarity == 31

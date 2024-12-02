@@ -18,18 +18,22 @@ def interpret_payload(*filepaths: PathLike) -> NDArray:
             for line in fileinput.input(*filepaths)
         ]
     )
-    return array
+    return array.T
 
 
-@deal.pre(lambda arr: arr.shape[1] == 2, message="Array shape must be (Nx2)")
-def measure_distance(array: NDArray) -> int:
-    by_list = array.T
-    lhs_sorted_idx = np.argsort(by_list[0])
-    rhs_sorted_idx = np.argsort(by_list[1])
+@deal.pre(
+    lambda lhs, rhs: lhs.shape == rhs.shape,
+    message="Arrays must be of the same dimensionality.",
+)
+def measure_distance(lhs: NDArray, rhs: NDArray) -> int:
+    """
+    Calculate 'distance' between the provided arrays. Distance in this case
+    is measured by the absolute difference between each list sorted.
+    """
+    lhs_sorted_idx = np.argsort(lhs)
+    rhs_sorted_idx = np.argsort(rhs)
 
-    diff = np.sum(
-        np.abs(by_list[0][lhs_sorted_idx] - by_list[1][rhs_sorted_idx])
-    )
+    diff = np.sum(np.abs(lhs[lhs_sorted_idx] - rhs[rhs_sorted_idx]))
     return diff
 
 
