@@ -26,6 +26,8 @@ dependencies = [
     "nox"
 ]
 
+[project.scripts]
+advent = 'advent.main:advent'
 
 [tool.setuptools.dynamic]
 version = {attr = "advent.__version__"}
