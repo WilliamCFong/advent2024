@@ -6,7 +6,10 @@ import numpy as np
 from numpy._typing import NDArray
 
 
-@deal.post(lambda arr: arr.shape[1] == 2)
+@deal.post(
+    lambda arr: arr.shape[0] == 2,
+    message="Returned array must be of two lists of equal size",
+)
 def interpret_payload(*filepaths: PathLike) -> NDArray:
     """
     Interpret Day 1 Location IDs in the pattern of
