@@ -26,14 +26,24 @@ def test_determine_safe_rows(matrix):
 
 
 def test_advent_reference_part_1():
-    ref = np.array(
-        [
-            [7, 6, 4, 2, 1],
-            [1, 2, 7, 8, 9],
-            [9, 7, 6, 2, 1],
-            [1, 3, 2, 4, 5],
-            [8, 6, 4, 4, 1],
-            [1, 3, 6, 7, 9],
-        ]
-    )
+    ref = [
+        np.array([7, 6, 4, 2, 1]),
+        np.array([1, 2, 7, 8, 9]),
+        np.array([9, 7, 6, 2, 1]),
+        np.array([1, 3, 2, 4, 5]),
+        np.array([8, 6, 4, 4, 1]),
+        np.array([1, 3, 6, 7, 9]),
+    ]
     assert count_safe_rows(ref) == 2
+
+
+def test_advent_reference_part_2():
+    ref = [
+        np.array([7, 6, 4, 2, 1]),
+        np.array([1, 2, 7, 8, 9]),
+        np.array([9, 7, 6, 2, 1]),
+        np.array([1, 3, 2, 4, 5]),
+        np.array([8, 6, 4, 4, 1]),
+        np.array([1, 3, 6, 7, 9]),
+    ]
+    assert count_safe_rows(ref, tolerance=1) == 4

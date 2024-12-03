@@ -44,9 +44,10 @@ def day_2(input_file: pathlib.Path, part_1: bool, trace: bool):
     if part_1:
         with profile(pass_through=not trace):
             n_safe_rows = day2.count_safe_rows(payload)
-        print(f"{input_file.name} has {n_safe_rows} safe reports")
     else:
-        raise NotImplementedError
+        with profile(pass_through=not trace):
+            n_safe_rows = day2.count_safe_rows(payload, tolerance=1)
+    print(f"{input_file.name} has {n_safe_rows} safe reports")
 
 
 if __name__ == "__main__":
