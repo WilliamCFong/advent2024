@@ -2,7 +2,8 @@ import numpy as np
 from hypothesis import HealthCheck, given, settings
 from hypothesis import strategies as st
 
-from advent.day2 import count_safe_rows, determine_safe_rows
+from advent import day2
+from advent.day2 import count_safe_rows
 
 
 def reactor_levels():
@@ -11,18 +12,44 @@ def reactor_levels():
     )
 
 
+def ascending_reactor_levels():
+    return st.builds(
+        np.arange,
+        start=st.just(0),
+        stop=st.integers(min_value=2, max_value=1000),
+    ).map(list)
+
+
+def descending_reactor_levels():
+    return ascending_reactor_levels().map(lambda arr: arr[::-1])
+
+
+def safe_reactor_levels():
+    return st.one_of(ascending_reactor_levels(), descending_reactor_levels())
+
+
 @settings(
-    suppress_health_check=[HealthCheck.too_slow, HealthCheck.data_too_large]
+    suppress_health_check=[HealthCheck.too_slow, HealthCheck.data_too_large],
+    deadline=None,
 )
-@given(reactor_levels())
-def test_determine_safe_rows(matrix):
-    safe_row_mask = determine_safe_rows(matrix)
-    for levels, check in zip(matrix, safe_row_mask):
-        diff = np.diff(levels)
-        consistent_delta = np.logical_or(np.all(diff > 0), np.all(diff < 0))
-        within_tolerance = np.all(np.abs(diff) < 4)
-        ref = consistent_delta & within_tolerance
-        assert ref == check
+@given(safe_reactor_levels(), st.data())
+def test_tolerance_w_zero_diff(levels: list[int], data):
+    idx = data.draw(st.integers(min_value=0, max_value=len(levels) - 1))
+    levels.insert(idx, levels[idx])
+    assert not day2.reactor_report_tolerable(np.array(levels))
+    assert day2.reactor_report_tolerable(np.array(levels), tolerance=1)
+
+
+@settings(
+    suppress_health_check=[HealthCheck.too_slow, HealthCheck.data_too_large],
+    deadline=None,
+)
+@given(safe_reactor_levels(), st.data())
+def test_tolerance_w_opposite_sign(levels: list[int], data):
+    idx = data.draw(st.integers(min_value=0, max_value=len(levels) - 1))
+    levels.insert(idx, levels[idx] * -1)
+    assert not day2.reactor_report_tolerable(np.array(levels))
+    assert day2.reactor_report_tolerable(np.array(levels), tolerance=1)
 
 
 def test_advent_reference_part_1():
